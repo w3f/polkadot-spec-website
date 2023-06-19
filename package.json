@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "./scripts/tsc.sh; npm run preBuild; docusaurus build",
+    "build": "npm run copy_files; ./scripts/tsc.sh; npm run preBuild; docusaurus build",
+    "copy_files": "cp -r ../algorithms src/algorithms; cp -r ../docs src/docs; cp ../kaitai_structures src/kaitai_structures; cp ../bibliography.bib src/bibliography.bib",
     "preBuild": "npm run numerationSystem; npm run addBibliographyTitle; npm run checkBrokenExternalLinks",
     "build_with_kaitai": "./scripts/kaitai_render.sh; ./scripts/tsc.sh; npm run preBuild_with_kaitai; docusaurus build",
     "preBuild_with_kaitai": "npm run graphvizSvgFixer; npm run preBuild",
