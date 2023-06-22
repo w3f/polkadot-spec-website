@@ -3,6 +3,10 @@
 
 # Production
 /build
+/src/algorithms
+/src/docs
+/src/kaitai_structures
+/src/bibliography.bib
 
 # Generated files
 .docusaurus
