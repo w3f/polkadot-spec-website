@@ -1,3 +1,5 @@
+// https://dirask.com/posts/JavaScript-on-location-changed-event-on-url-changed-event-DKeyZj
+
 const addLocationChangeEvent = () => {
   const script = () => {
     (function() {
