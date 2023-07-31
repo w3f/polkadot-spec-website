@@ -26,6 +26,7 @@
     "@docusaurus/core": "0.0.0-5547",
     "@docusaurus/plugin-debug": "0.0.0-5547",
     "@docusaurus/preset-classic": "0.0.0-5547",
+    "@docusaurus/theme-mermaid": "0.0.0-5547",
     "@mdx-js/react": "^1.6.22",
     "@types/cheerio": "^0.22.31",
     "cheerio": "^1.0.0-rc.12",
