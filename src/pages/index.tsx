@@ -23,8 +23,16 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/id-polkadot-protocol">
+            to="/id-polkadot-protocol"
+          >
             Read the Spec
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to={require('../../static/Polkadot_Protocol_Spec.pdf').default}
+            target="_blank"
+          >
+            Download PDF
           </Link>
         </div>
       </div>
