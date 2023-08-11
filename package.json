@@ -14,6 +14,7 @@
     "addBibliographyTitle": "node ./preBuild/addBibliographyTitle/index.js",
     "checkBrokenExternalLinks": "node ./preBuild/checkBrokenExternalLinks/index.js",
     "build_pdf": "./scripts/build_pdf.sh",
+    "test_build_pdf": "npm run serve &; ./scripts/build_pdf.sh && kill $! && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
