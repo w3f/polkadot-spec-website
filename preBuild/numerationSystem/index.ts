@@ -2,6 +2,7 @@ import * as fs from 'fs';
 const sidebarRoutes = require('../sidebarRoutes');
 const filePathIn = 'src/docs'
 const filePathOut = 'docs'
+const implementationGuidePathOut = 'docs/implementation-guide'
 const entitiesMapPathOut = 'static'
 
 export interface MdFile {
@@ -76,27 +77,28 @@ const numerationSystem = () => {
   let chaptersCounter = 1;
   let appendixsCounter = "A";
   for (const route of sidebarRoutes) {
-    // we don't want to include the main chapters and index in the numbering
-    if (route.level != 0 || route.label.includes('Appendix')) {
-      if (route.label.includes('Appendix')) {
-        chaptersMap[route.id] = appendixsCounter;
-        appendixsCounter = String.fromCharCode(appendixsCounter.charCodeAt(0) + 1);
+    if (!route.id.includes('gen-index-')) {
+      // we don't want to include the main chapters and index in the numbering
+      if (route.level != 0 || route.label.includes('Appendix')) {
+        if (route.label.includes('Appendix')) {
+          chaptersMap[route.id] = appendixsCounter;
+          appendixsCounter = String.fromCharCode(appendixsCounter.charCodeAt(0) + 1);
+        } else {
+          chaptersMap[route.id] = chaptersCounter;
+          chaptersCounter++;
+        }
+      }
+      const filePath = `${filePathIn}/${route.id}.md`;
+      const md = fs.readFileSync(filePath, 'utf8');
+      let isToFix = toReplace.some((item) => md.includes(item));
+      let mdFile: MdFile = { routeId: route.id, md };
+      if (isToFix) {
+        mdFilesToCompile.push(mdFile);
       } else {
-        chaptersMap[route.id] = chaptersCounter;
-        chaptersCounter++;
+        mdFilesNotToCompile.push(mdFile);
       }
     }
-    const filePath = `${filePathIn}/${route.id}.md`;
-    const md = fs.readFileSync(filePath, 'utf8');
-    let isToFix = toReplace.some((item) => md.includes(item));
-    let mdFile: MdFile = { routeId: route.id, md };
-    if (isToFix) {
-      mdFilesToCompile.push(mdFile);
-    } else {
-      mdFilesNotToCompile.push(mdFile);
-    }
   }
-
   let defCounter = 0;
   let algoCounter = 0;
   let tablesCounter = 0;
@@ -192,6 +194,10 @@ const numerationSystem = () => {
 
   if (!fs.existsSync(filePathOut)) {
     fs.mkdirSync(filePathOut);
+  }
+
+  if (!fs.existsSync(implementationGuidePathOut)) {
+    fs.mkdirSync(implementationGuidePathOut);
   }
 
   // delete all the md files in the output folder, skipping the folders if any

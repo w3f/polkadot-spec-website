@@ -21,18 +21,17 @@ function HomepageHeader() {
         </h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
+        <Link
             className="button button--secondary button--lg"
-            to="/id-polkadot-protocol"
+            to="/specification"
           >
-            Read the Spec
+            Specification
           </Link>
           <Link
             className="button button--secondary button--lg"
-            to={require('../../static/Polkadot_Protocol_Spec.pdf').default}
-            target="_blank"
+            to="/implementation-guide"
           >
-            Download PDF
+            Implementation Guide
           </Link>
         </div>
       </div>

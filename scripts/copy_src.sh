@@ -4,6 +4,7 @@ dirs=(
   "algorithms"
   "docs"
   "kaitai_structures"
+  "implementation-guide"
 )
 files=(
   "bibliography.bib"

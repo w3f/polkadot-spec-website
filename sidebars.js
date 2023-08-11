@@ -24,79 +24,105 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Host',
+      label: 'Specification',
       collapsed: false,
-      link: {type:'doc', id:'part-polkadot-host'},
+      link: {type:'doc', id:'specification'},
       items: [
         {
-          type: 'doc',
-          label: '1. Overview',
-          id: 'chap-overview',
+          type: 'category',
+          label: 'Host',
+          collapsed: false,
+          link: {type:'doc', id:'part-polkadot-host'},
+          items: [
+            {
+              type: 'doc',
+              label: '1. Overview',
+              id: 'chap-overview',
+            },
+            {
+              type: 'doc',
+              label: '2. States and Transitions',
+              id: 'chap-state',
+            },
+            {
+              type: 'doc',
+              label: '3. Synchronization',
+              id: 'chap-sync',
+            },
+            {
+              type: 'doc',
+              label: '4. Networking',
+              id: 'chap-networking',
+            },
+            {
+              type: 'doc',
+              label: '5. Block Production',
+              id: 'sect-block-production',
+            },
+            {
+              type: 'doc',
+              label: '6. Finality',
+              id: 'sect-finality',
+            },
+            {
+              type: 'doc',
+              label: '7. Light Clients',
+              id: 'sect-lightclient',
+            },
+            {
+              type: 'doc',
+              label: '8. Availability & Validity',
+              id: 'chapter-anv',
+            },
+          ]
         },
         {
-          type: 'doc',
-          label: '2. States and Transitions',
-          id: 'chap-state',
-        },
-        {
-          type: 'doc',
-          label: '3. Synchronization',
-          id: 'chap-sync',
-        },
-        {
-          type: 'doc',
-          label: '4. Networking',
-          id: 'chap-networking',
-        },
-        {
-          type: 'doc',
-          label: '5. Block Production',
-          id: 'sect-block-production',
-        },
-        {
-          type: 'doc',
-          label: '6. Finality',
-          id: 'sect-finality',
-        },
-        {
-          type: 'doc',
-          label: '7. Light Clients',
-          id: 'sect-lightclient',
-        },
-        {
-          type: 'doc',
-          label: '8. Availability & Validity',
-          id: 'chapter-anv',
+          type: 'category',
+          label: 'Runtime',
+          collapsed: false,
+          link: {type:'doc', id:'part-polkadot-runtime'},
+          items: [
+            {
+              type: 'doc',
+              label: '9. Extrinsics',
+              id: 'id-extrinsics',
+            },
+            {
+              type: 'doc',
+              label: '10. Weights',
+              id: 'id-weights',
+            },
+            {
+              type: 'doc',
+              label: '11. Consensus',
+              id: 'id-consensus',
+            },
+            {
+              type: 'doc',
+              label: '12. Metadata',
+              id: 'sect-metadata',
+            },
+          ]
         },
       ]
     },
     {
       type: 'category',
-      label: 'Runtime',
+      label: 'Implementation Guide',
       collapsed: false,
-      link: {type:'doc', id:'part-polkadot-runtime'},
+      link: {type:'doc', id:'implementation-guide/index'},
       items: [
         {
           type: 'doc',
-          label: '9. Extrinsics',
-          id: 'id-extrinsics',
+          label: '1. First',
+          id: 'implementation-guide/first',
         },
         {
           type: 'doc',
-          label: '10. Weights',
-          id: 'id-weights',
+          label: '2. Second',
+          id: 'implementation-guide/second',
         },
-        {
-          type: 'doc',
-          label: '11. Consensus',
-          id: 'id-consensus',
-        },
-        {
-          type: 'doc',
-          label: '12. Metadata',
-          id: 'sect-metadata',
-        },
-      ]
+      ],
     },
     {
       type: 'doc',
