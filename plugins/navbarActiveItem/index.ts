@@ -4,14 +4,14 @@ const navbarActiveItem = () => {
   const script = () => {
     const breadcrumbs = document.getElementsByClassName('breadcrumbs')[0];
     if (breadcrumbs) {
-      const chapter = breadcrumbs.children[1].children[0];
-      const chapterSpan = chapter.tagName === 'A' ? chapter.children[0] : chapter;
-      const chapterName = chapterSpan.innerHTML;
+      const chapter = breadcrumbs?.children[2]?.children[0];
+      const chapterSpan = chapter?.tagName === 'A' ? chapter?.children[0] : chapter;
+      const chapterName = chapterSpan?.innerHTML;
       const navbar = document.getElementsByClassName('navbar__items--right')[0];
       const links = navbar.querySelectorAll('a[aria-current="page"]');
       const activeLinkClass = 'navbar__link--active';
       links.forEach(link => {
-        if (link.innerHTML != chapterName) {
+        if (chapter === undefined || link.innerHTML != chapterName) {
           link.classList.remove(activeLinkClass);
         } else {
           if (!link.classList.contains(activeLinkClass)) {
