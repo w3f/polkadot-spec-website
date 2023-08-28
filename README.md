@@ -30,6 +30,7 @@ The bash scripts inside this folder are called by the `package.json` scripts.
 - `copy_src.sh` safely copies all the files inside the parent folder of the `polkadot-spec-website` repo (which is `polkadot-spec`);
 - `kaitai_render.sh` renders the Kaitai Struct files, generating the corresponding images;
 - `tsc.sh` compiles the TypeScript files inside `preBuild` and `plugins`.
+- `build_pdf.sh` builds the PDF files for the Specification and Implementation Guide. It will work only if you're running locally the entire website (`localhost:3000`), and you have to run `npx docusaurus build` after it, in order to correctly include these files in the website. If you run `npm run build_pdf`, everything will be made automatically (refer to `package.json`).
 
 ### `preBuild`
 
@@ -52,3 +53,16 @@ These scripts are called after the build or when the website pages are loaded in
 - `redirectOldLinks` redirects the old links to the new ones; this [community plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-client-redirects) is not sufficient, as to redirect we must know where a section is located in the new website (e.g., the current section findable at https://spec.polkadot.network/chap-state#sect-state-replication was findable with https://spec.polkadot.network#sect-state-replication in the old website);
 - `resizeSvg` resizes the SVG images when a page is loaded; this is needed because the `graphvizSvgFixer` sometimes removes useless things from the SVGs, and this can cause the images to be too small;
 - `safePluginExecution.ts` makes the environment execute the plugins after `timeout_ms` milliseconds so that the website is always loaded before the plugins are executed.
+
+### `package.json`
+
+Inside this file you can find some custom scripts useful to build the website. The following three are the main scripts, that call other sub-scripts always defined in `package.json`:
+- `build`: this script builds the website without re-rendering the images defined with kaitai, with the following steps:
+  1. Copies the source files (markdown docs, latex algos, kaitai structures...) from the parent folder (`polkadot-spec` repo);
+  2. Compiles and run the plugins that generate new markdown files, starting from the ones copied in the first step;
+  3. Runs `npx docusaurus build` to finally generate the HTML website, using the markdown files generated in the second step. 
+- `build_with_kaitai`: similar to `build`, but it also re-renders the SVG files defined with kaitai (and fixes them). Run this if the `kaitai_structures` files inside `polkadot-spec` have been modified.
+- `build_pdf`: builds the one pager PDFs of the website (Specification and Implementation Guide), with the following steps:
+  1. Runs locally the entire website;
+  2. Calls the `build_pdf.sh` script to actually build the PDFs;
+  3. Kills the local website process and builds again the website (`docusaurus build` is enough) to include the PDFs.
