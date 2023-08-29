@@ -66,3 +66,9 @@ Inside this file you can find some custom scripts useful to build the website. T
   1. Runs locally the entire website;
   2. Calls the `build_pdf.sh` script to actually build the PDFs;
   3. Kills the local website process and builds again the website (`docusaurus build` is enough) to include the PDFs.
+
+## Deployment
+
+Whenever you edit anything inside this repository, you have to manually fire the `publish.yml` workflow inside the `polkadot-spec` repo (https://github.com/w3f/polkadot-spec), if you want to update the deployed website.
+
+Otherwise, if you're changing both this and the main repo, push the changes to this repo first, then the changes to the main `polkadot-spec`, so the website will be re-deployed automatically (as any `push` to the `polkadot-spec` repo calls the `publish.yml` workflow).
