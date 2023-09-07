@@ -146,6 +146,10 @@ async function createConfig() {
                   label: 'Privacy Policy',
                   to: 'Support%20Docs/privacy_policy',
                 },
+                {
+                  label: 'Legal Disclosures',
+                  to: 'https://web3.foundation/legal-disclosures/',
+                },
               ],
             }, 
             {
