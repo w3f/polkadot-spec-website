@@ -110,17 +110,17 @@ const sidebars = {
       type: 'category',
       label: 'Implementation Guide',
       collapsed: false,
-      link: {type:'doc', id:'implementation-guide/index'},
+      link: {type:'doc', id:'implementation-guide/docs/index'},
       items: [
         {
           type: 'doc',
           label: '1. First',
-          id: 'implementation-guide/first',
+          id: 'implementation-guide/docs/first',
         },
         {
           type: 'doc',
           label: '2. Second',
-          id: 'implementation-guide/second',
+          id: 'implementation-guide/docs/second',
         },
       ],
     },
