@@ -99,6 +99,19 @@ const sidebars = {
       ]
     },
     {
+      type: 'category',
+      label: 'Implementation Guide',
+      collapsed: false,
+      link: {type:'doc', id:'Implementation Guide/index'},
+      items: [
+        {
+          type: 'doc',
+          label: 'FAQ',
+          id: 'Implementation Guide/faq',
+        },
+      ],
+    },
+    {
       type: 'doc',
       label: 'Appendix A: Cryptography & Encoding',
       id: 'id-cryptography-encoding',
