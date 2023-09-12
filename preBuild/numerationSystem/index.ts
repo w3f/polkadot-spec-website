@@ -76,27 +76,28 @@ const numerationSystem = () => {
   let chaptersCounter = 1;
   let appendixsCounter = "A";
   for (const route of sidebarRoutes) {
-    // we don't want to include the main chapters and index in the numbering
-    if (route.level != 0 || route.label.includes('Appendix')) {
-      if (route.label.includes('Appendix')) {
-        chaptersMap[route.id] = appendixsCounter;
-        appendixsCounter = String.fromCharCode(appendixsCounter.charCodeAt(0) + 1);
+    if (!route.id.includes('gen-index-') && !route.id.includes('Implementation')) {
+      // we don't want to include the main chapters and index in the numbering
+      if (route.level != 0 || route.label.includes('Appendix')) {
+        if (route.label.includes('Appendix')) {
+          chaptersMap[route.id] = appendixsCounter;
+          appendixsCounter = String.fromCharCode(appendixsCounter.charCodeAt(0) + 1);
+        } else {
+          chaptersMap[route.id] = chaptersCounter;
+          chaptersCounter++;
+        }
+      }
+      const filePath = `${filePathIn}/${route.id}.md`;
+      const md = fs.readFileSync(filePath, 'utf8');
+      let isToFix = toReplace.some((item) => md.includes(item));
+      let mdFile: MdFile = { routeId: route.id, md };
+      if (isToFix) {
+        mdFilesToCompile.push(mdFile);
       } else {
-        chaptersMap[route.id] = chaptersCounter;
-        chaptersCounter++;
+        mdFilesNotToCompile.push(mdFile);
       }
     }
-    const filePath = `${filePathIn}/${route.id}.md`;
-    const md = fs.readFileSync(filePath, 'utf8');
-    let isToFix = toReplace.some((item) => md.includes(item));
-    let mdFile: MdFile = { routeId: route.id, md };
-    if (isToFix) {
-      mdFilesToCompile.push(mdFile);
-    } else {
-      mdFilesNotToCompile.push(mdFile);
-    }
   }
-
   let defCounter = 0;
   let algoCounter = 0;
   let tablesCounter = 0;

@@ -1,25 +1,33 @@
 const sidebars = require('../sidebars.js');
 let sidebarRoutes = [];
-for (let item of sidebars.tutorialSidebar) {
+
+function processSidebarItems(items, level) {
+  for (let item of items) {
     if (item.type === 'doc') {
-        sidebarRoutes.push({
-            id: item.id,
-            label: item.label,
-            level: 0,
-        });
+      sidebarRoutes.push({
+        id: item.id,
+        label: item.label,
+        level: level,
+      });
     } else if (item.type === 'category') {
+      if (item.link?.type === 'generated-index') {
         sidebarRoutes.push({
-            id: item.link.id,
-            label: item.label,
-            level: 0,
+          id: 'gen-index-' + item.label.toLowerCase(),
+          label: item.label,
+          level: level,
         });
-        for (let subItem of item.items) {
-            sidebarRoutes.push({
-                id: subItem.id,
-                label: subItem.label,
-                level: 1,
-            });
-        }
+      } else {
+        sidebarRoutes.push({
+          id: item.link.id,
+          label: item.label,
+          level: level,
+        });
+      }
+      processSidebarItems(item.items, level + 1);
     }
+  }
 }
+
+processSidebarItems(sidebars.tutorialSidebar, 0);
+
 module.exports = sidebarRoutes;
