@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "watch": "./scripts/tsc.sh; npm run start & nodemon -w ../docs -e md --exec \"./scripts/copy_src.sh; npm run preBuild\"",
+    "_watchBuild": "./scripts/copy_src.sh; WATCH_MODE=1 npm run numerationSystem; WATCH_MODE=1 npm run addBibliographyTitle; node ./preBuild/moveToDocusaurus/index.js",
+    "watch": "./scripts/tsc.sh; npm run start & nodemon -w ../docs -e md --exec \"npm run _watchBuild\"",
     "build": "./scripts/copy_src.sh; ./scripts/tsc.sh; npm run preBuild; docusaurus build",
     "preBuild": "npm run numerationSystem; npm run addBibliographyTitle; npm run checkBrokenExternalLinks",
     "build_with_kaitai": "./scripts/kaitai_render.sh; ./scripts/copy_src.sh; ./scripts/tsc.sh; npm run preBuild_with_kaitai; docusaurus build",

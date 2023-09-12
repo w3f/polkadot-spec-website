@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 const sidebarRoutes = require('../sidebarRoutes');
 const filePathIn = 'src/docs'
-const filePathOut = 'docs'
+const filePathOut = process.env.WATCH_MODE ? '_docs' : 'docs'
 const entitiesMapPathOut = 'static'
 
 export interface MdFile {

@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-const mdPath = "docs";
+const mdPath = process.env.WATCH_MODE ? '_docs' : 'docs';
 
 const addBibliographyTitle = () => {
     const mdFileNames = fs.readdirSync(mdPath).filter((fileName) => {
