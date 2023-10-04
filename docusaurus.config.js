@@ -7,12 +7,35 @@ const math = require('remark-math');
 const katex = require('rehype-katex');
 const path = require('path');
 
+
+async function getLatestReleaseVersion() {
+  try {
+    const response = await fetch('https://api.github.com/repos/w3f/polkadot-spec/releases/latest');
+    if (response.ok) {
+      const releaseData = await response.json();
+      const latestVersion = releaseData.tag_name.substr(1);;
+      return latestVersion;
+    } else {
+      console.error('Failed to fetch latest release:', response.statusText);
+      return 'Unknown';
+    }
+  } catch (err) {
+    console.error('Error fetching latest release:', err);
+    return 'Unknown';
+  }
+}
+
+
 // /** @type {import('@docusaurus/types').Config} */
 async function createConfig() {
   const citation = (await import('rehype-citation')).default;
+  const latestVersion = await getLatestReleaseVersion();
+  console.log(latestVersion);
+
+
   return {
     title: 'Polkadot Protocol Specification',
-    tagline: 'Enabling Implementers - Version 0.2.1',
+    tagline: 'Enabling Implementers - Version ' + latestVersion,
     favicon: 'img/polkadot-logo.png',
     url: 'https://spec.polkadot.network/',
     baseUrl: '/',
@@ -59,7 +82,7 @@ async function createConfig() {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl:
-              'https://github.com/w3f/polkadot-spec/blob/main/src',
+              'https://github.com/w3f/polkadot-spec/blob/main',
             routeBasePath: '/', // Serve the docs at the site's root
             admonitions: {
               tag: ':::',
