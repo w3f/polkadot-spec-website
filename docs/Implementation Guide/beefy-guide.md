@@ -4,15 +4,22 @@ title: BEEFY Light Client Implementer's Guide
 
 ## Introduction
 
-BEEFY is an additional consensus layer designed for Light Clients to follow Polkadot's finality. In this guide we take a closer look at the light-client side implementation details. For details of the BEEFY finality process and host-side protocol, please refer to the [BEEFY Specifications](https://spec.polkadot.network/sect-finality#sect-grandpa-beefy). 
+BEEFY is an additional consensus layer designed for Light Clients to follow Polkadot's finality. In this section, we take a closer look at the light-client side implementation details. For details of the BEEFY finality process and host-side protocol, please refer to the [BEEFY Specifications](https://spec.polkadot.network/sect-finality#sect-grandpa-beefy). 
 The BEEFY justifications (signed commitments or signed commitment witnesses) are circulated /gossiped similar to GRANDPA justifications on a dedicated network substream. The light client can directly listen to the [substream](https://spec.polkadot.network/chap-networking#sect-protocols-substreams) or rely upon a [relayer](https://spec.polkadot.network/sect-finality#defn-beefy-relayer) to fetch the latest finality  via the [payload](https://spec.polkadot.network/sect-finality#defn-beefy-payload) (the MMR root  of the chain containing the latest BEEFY finalized block). 
 
 
 ## V1: Random Sampling using ECDSA-BEEFY Signatures
-Random Sampling is an interactive protocol between the light client and a relayer with probabilistic security guarantees for the authenticity and finality of the payload. For the random sampling based light clients, the security guarantees of the approach are parametrized by the number of BEEFY signatures checked by the light client.
+Random Sampling is an interactive protocol between the light client and a relayer. It provides probabilistic security guarantees for the authenticity and finality of the payload. The security guarantees of the approach are parametrized by the number of BEEFY signatures checked by the light client.
+
+
+There are _ main components from light clients perspective:
+1. Keeping track of the current and next validator set details (this includes the validator set id, validator set length, and the merkle root of the validator set). The [MMR leaf](https://spec.polkadot.network/sect-finality#defn-beefy-payload) of the latest block is passed over by the relayer.This contains the information about the next validator set which can be verified against the latest payload (since the payload is the root of an MMR containing the the latest block's MMR leaf). 
+2. Once the latest payload is received along with an array of validator signatures, the light client verifies the signature against the merkle root of the validator set (obtained in step-1). A light client with enough compute resources and bandwidth can deterministically verify the [payload](https://spec.polkadot.network/sect-finality#defn-beefy-payload) it receives. This is achieved by the light client checking at least $1/3*N +1$ (where $N$ is the number of validators in active set) signatures from the current validator set. The light client has the merkle root of the current set of validator's.  
+
 
 
 
 
 
 ## V2: SNARKs using BLS-BEEFY Signatures
+Work in Progress
