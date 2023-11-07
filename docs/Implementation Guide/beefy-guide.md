@@ -25,7 +25,7 @@ The Message Sequence Chart below captures the interaction between a relayer (or 
 sequenceDiagram
     participant R as Relayer
     participant L as Light Client
-    R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
+    R->>L: (Commitment, Bitfield, ValidatorProof)
     Note right of L: Block No. is N
     Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
     Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
