@@ -2,7 +2,7 @@
 title: BEEFY Light Client Implementer's Guide
 ---
 
-## Introduction
+# Introduction
 
 BEEFY is an additional consensus layer designed for Light Clients to follow Polkadot's finality. In this section, we take a closer look at the light-client side implementation, i.e., how how to frequently update the new BEEFY commitments. For details of the BEEFY finality process and host-side protocol, please refer to the [BEEFY Specifications](https://spec.polkadot.network/sect-finality#sect-grandpa-beefy). 
 The BEEFY justifications (signed commitments or signed commitment witnesses) are circulated /gossiped similar to GRANDPA justifications on a dedicated network substream. The light client can directly listen to the [substream](https://spec.polkadot.network/chap-networking#sect-protocols-substreams) or rely upon a [relayer](https://spec.polkadot.network/sect-finality#defn-beefy-relayer) to fetch the latest finality  via the [payload](https://spec.polkadot.network/sect-finality#defn-beefy-payload) (the MMR root  of the chain containing the latest BEEFY finalized block). 
@@ -29,20 +29,22 @@ The light client local state with respect to Beefy interactions contains:
 
 ```mermaid
 sequenceDiagram
-    participant S as Substream of <br> Gossip Messages
     participant L as Light Client
-    S->>L: (Commitment, Bitfield, ValidatorProof)
+    participant R as Relayer
+   
+    L->>R: request BEEFY justifications at block-height n 
+    activate R
+    R->>L: Responds with (Commitment, Bitfield, ValidatorProof)
+    deactivate R
+
     Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
     Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
-    S->>L: CommitPrevRandao(commitHash)
-    Note right of L: Block No. = N' 
-    Note over L: Check for Delay: <br> randaoCommitDelay < N'-N  <br> <= randaoCommitDelay + randaoCommitExpiration
-    S->>L: CreateFinalBitfield(commitHash, Bitfield) 
-    Note over L: Compute _subsampBitfield with seed <br> as N'.prevRandao
-    L->>S: SubSample Bitfield (_subsampbitfield)
-    Note over S: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
-    S->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
-    Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
+    Note over L: determine number of signatures to be checked <br> m = minSigRequired(max_transaction_value, slash_value)
+    Note over L: randomly subsample m indices from Bitfield
+    L->>R: Request Signatures of m subsample indices _subsamplebitfield
+    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
+    R->>L: Responds with proofs (Commitment,Bitfield, [p1,..,pk])
+    Note over L: Verify Commitment, Verify Proofs, <br> and ensure proofs match the subsample requested
 ```
 
 ## V2: SNARKs using BLS-BEEFY Signatures
@@ -51,3 +53,35 @@ Work in Progress
 ## Further Reading:
 SnowBridge (implementing an on-chain BEEFY light client on Ethereum) documentation can be found [here](https://docs.snowbridge.network/architecture/verification/polkadot). 
 
+### Appendix-1: Message Sequence Chart of the interaction between Relayer and Light client on Ethereum along with state mutations.
+
+
+```mermaid
+sequenceDiagram
+    participant R as Relayer
+    participant L as Light Client
+    participant S as Storage
+    R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
+    Note right of L: Block No. is N
+    Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
+    Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
+    L->>S: Mutate Tickets
+    Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, N, vset.len(),0,h(Bitfield)}
+    R->>L: CommitPrevRandao(commitHash)
+    Note right of L: Block No. = N' 
+    Note over L: Check for Delay: <br> randaoCommitDelay < N'-N  <br> <= randaoCommitDelay + randaoCommitExpiration
+    L->>S: Mutate Tickets
+    Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),N'.prevRandao,h(Bitfield)}
+    R->>L: CreateFinalBitfield(commitHash, Bitfield) 
+    L->>S: Fetches N'.prevrandao 
+    activate S
+    S->>L: from Tickets[h(sender,commitHash)]
+    deactivate S
+    Note over L: Compute _subsampBitfield with seed <br> as N'.prevRandao
+    L->>R: SubSample Bitfield (_subsampbitfield)
+    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
+    R->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
+    Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
+    L->S: Mutate LatestBeefyBlock, LatestMMRRoothash
+    Note right of S: LatestBeefyBlock = Commitment.BlockNumber <br> LatestMMRRootHash= Commitment.payload.mmrroothash <br> delete Tickets[h(sender,commitHash)]
+```
