@@ -26,7 +26,7 @@ The light client local state with respect to Beefy interactions contains:
 1. `LatestBeefyBlock`: Block number of the latest block with verified BEEFY finality.
 2.  `latestMMRroot`: payload (MMR root with containing the leaf corresponding to latest BEEFY finalised block). 
 3.  `CurrentValidatorSet` and `NextValidatorSet`: Merkle roots of the current and next validator sets. 
-
+scd 
 ```mermaid
 sequenceDiagram
     participant L as Light Client
