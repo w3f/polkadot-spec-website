@@ -22,17 +22,16 @@ There are 3 main components from light clients perspective:
 
 The Message Sequence Chart below captures the interaction between a relayer (or any direct source of beefy justification gossip) and the light client. 
 
-The light client local state contains:
+The light client local state with respect to Beefy interactions contains:
 1. `LatestBeefyBlock`: Block number of the latest block with verified BEEFY finality.
 2.  `latestMMRroot`: payload (MMR root with containing the leaf corresponding to latest BEEFY finalised block). 
 3.  `CurrentValidatorSet` and `NextValidatorSet`: Merkle roots of the current and next validator sets. 
 
 ```mermaid
 sequenceDiagram
-    participant S as  of Relayer <br> Gossip Messages
+    participant S as Substream of <br> Gossip Messages
     participant L as Light Client
     S->>L: (Commitment, Bitfield, ValidatorProof)
-    Note right of L: Block No. is N
     Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
     Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
     S->>L: CommitPrevRandao(commitHash)
@@ -44,11 +43,11 @@ sequenceDiagram
     Note over S: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
     S->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
     Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
-
 ```
-
-#### Further Reading:
-Details of SnowBridge implementation can be [here](https://docs.snowbridge.network/architecture/verification/polkadot). 
 
 ## V2: SNARKs using BLS-BEEFY Signatures
 Work in Progress
+
+## Further Reading:
+SnowBridge (implementing an on-chain BEEFY light client on Ethereum) documentation can be found [here](https://docs.snowbridge.network/architecture/verification/polkadot). 
+
